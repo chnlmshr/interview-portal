@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Form } from "./Form";
 import { Navbar } from "./Navbar";
+import { useNavigate } from "react-router-dom";
 
 export const ScheduleInterview = () => {
+  const navigate = useNavigate();
   const initialState = {
     name: "",
     date: "",
@@ -11,11 +14,72 @@ export const ScheduleInterview = () => {
     interviewees: [],
   };
   const [state, setState] = useState(initialState);
-  const handleOnChange = (event) => {
-    setState({ ...state, [event.target.name]: event.target.value });
+
+  const initialParticipants = {
+    interviewers: [],
+    interviewees: [],
   };
-  const handleOnSubmit = (event) => {
-    event.preventDefault();
+
+  const [participants, setParticipants] = useState(initialParticipants);
+
+  useEffect(() => {
+    var sampleInterview = {
+      name: "Interview 1",
+      date: "2022-12-12",
+      startTime: "12:05",
+      endTime: "02:50",
+      id: "xyz",
+      interviewers: [
+        {
+          name: "Interviewer 1",
+          email: "interviewer1@gmail.com",
+        },
+        {
+          name: "Interviewer 2",
+          email: "interviewer2@gmail.com",
+        },
+        {
+          name: "Interviewer 3",
+          email: "interviewer3@gmail.com",
+        },
+        {
+          name: "Interviewer 4",
+          email: "interviewer4@gmail.com",
+        },
+      ],
+      interviewees: [
+        {
+          name: "Interviewer 1",
+          email: "interviewee1@gmail.com",
+        },
+        {
+          name: "Interviewer 2",
+          email: "interviewee2@gmail.com",
+        },
+        {
+          name: "Interviewer 3",
+          email: "interviewee3@gmail.com",
+        },
+        {
+          name: "Interviewer 4",
+          email: "interviewee4@gmail.com",
+        },
+      ],
+    };
+    // setState({ interviews: sampleInterview });
+    setParticipants({
+      interviewees: sampleInterview.interviewees,
+      interviewers: sampleInterview.interviewers,
+    });
+  }, []);
+
+  const handleOnSubmit = (interview) => {
+    console.log(interview);
+  };
+
+  const handleDiscard = () => {
+    console.log("Deleted!");
+    navigate("/");
   };
 
   return (
@@ -24,90 +88,13 @@ export const ScheduleInterview = () => {
       <div className="container">
         <div className="row">
           <div className="col-8 offset-2">
-            <form className="p-3" onSubmit={handleOnSubmit}>
-              <h5 className="pb-3">Schedule an Interview</h5>
-              <div className="form-group py-2">
-                <input
-                  type="text"
-                  className="form-control"
-                  name="name"
-                  value={state.name}
-                  onChange={handleOnChange}
-                  placeholder="Interview Name"
-                  required
-                />
-              </div>
-              <div className="form-group py-2">
-                <div className="input-group">
-                  <div className="input-group-prepend">
-                    <div className="input-group-text">Date</div>
-                  </div>
-                  <input
-                    type="date"
-                    className="form-control"
-                    name="date"
-                    id="date"
-                    value={state.date}
-                    onChange={handleOnChange}
-                    required
-                  />
-                </div>
-              </div>
-              <div className="form-group py-2">
-                <div className="input-group">
-                  <div className="input-group-prepend">
-                    <div className="input-group-text">Start Time</div>
-                  </div>
-                  <input
-                    type="time"
-                    className="form-control"
-                    name="startTime"
-                    id="startTime"
-                    value={state.startTime}
-                    onChange={handleOnChange}
-                    placeholder="Start Time"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="form-group py-2">
-                <div className="input-group">
-                  <div className="input-group-prepend">
-                    <div className="input-group-text">End Time</div>
-                  </div>
-                  <input
-                    type="time"
-                    className="form-control"
-                    name="endTime"
-                    id="endTime"
-                    value={state.endTime}
-                    onChange={handleOnChange}
-                    placeholder="End Time"
-                    required
-                  />
-                </div>
-              </div>
-              <div className="input-group py-2">
-                <select
-                  name="interviewers"
-                  className="form-select"
-                  value={state.value}
-                  onChange={handleOnChange}
-                >
-                  <option value="Choose Interviewees">
-                    Choose Interviewees
-                  </option>
-                </select>
-              </div>
-              <div className="form-group py-2">
-                {/* <small id="error" className="form-text">
-                  {state.errorMessage}
-                </small> */}
-              </div>
-              <button type="submit" className="btn btn-primary">
-                Submit
-              </button>
-            </form>
+            <Form
+              currentState={state}
+              allParticipants={participants}
+              handleOnSubmit={handleOnSubmit}
+              handleDiscard={handleDiscard}
+              action="Schedule"
+            />
           </div>
         </div>
       </div>

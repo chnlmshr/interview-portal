@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const InterviewCard = (props) => {
   return (
@@ -25,9 +26,12 @@ export const InterviewCard = (props) => {
           >
             Details
           </button>
-          <a href="/update" className="btn btn-sm btn-secondary">
+          <Link
+            to={`/update/${props.interview.id}`}
+            className="btn btn-sm btn-secondary"
+          >
             Update
-          </a>
+          </Link>
         </div>
       </div>
     </div>

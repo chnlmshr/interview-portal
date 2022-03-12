@@ -1,5 +1,5 @@
 import React from "react";
-
+import { Link } from "react-router-dom";
 export const Navbar = ({ homeActive, scheduleActive }) => {
   return (
     <div className="mx-5 d-flex justify-content-between bg-light px-4 py-2 rounded border-bottom">
@@ -7,20 +7,21 @@ export const Navbar = ({ homeActive, scheduleActive }) => {
         Interview Creation Portal
       </a>
       <div className="d-flex">
-        <a
+        <Link
           className={`nav-link ${homeActive ? "text-black" : "text-secondary"}`}
-          href="/"
+          to="/"
         >
           Home
-        </a>
-        <a
+        </Link>
+        <Link
           className={`nav-link ${
             scheduleActive ? "text-black" : "text-secondary"
           }`}
-          href="/schedule"
+          to="/schedule"
         >
+          {" "}
           Schedule
-        </a>
+        </Link>
       </div>
     </div>
   );

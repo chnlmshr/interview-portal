@@ -24,9 +24,9 @@ export const Home = () => {
     var sampleInterviews = [
       {
         name: "Interview 1",
-        date: "12-12-2022",
-        startTime: "12:05 PM",
-        endTime: "02:50 PM",
+        date: "2022-12-12",
+        startTime: "12:05",
+        endTime: "02:50",
         id: "xyz",
         interviewers: [
           {
@@ -67,9 +67,9 @@ export const Home = () => {
       },
       {
         name: "Interview 1",
-        date: "12-12-2022",
-        startTime: "12:05 PM",
-        endTime: "02:50 PM",
+        date: "2022-12-12",
+        startTime: "12:05",
+        endTime: "02:50",
         id: "xyz",
         interviewers: [
           {
@@ -110,9 +110,9 @@ export const Home = () => {
       },
       {
         name: "Interview 1",
-        date: "12-12-2022",
-        startTime: "12:05 PM",
-        endTime: "02:50 PM",
+        date: "2022-12-12",
+        startTime: "12:05",
+        endTime: "02:50",
         id: "xyz",
         interviewers: [
           {
@@ -153,9 +153,9 @@ export const Home = () => {
       },
       {
         name: "Interview 1",
-        date: "12-12-2022",
-        startTime: "12:05 PM",
-        endTime: "02:50 PM",
+        date: "2022-12-12",
+        startTime: "12:05",
+        endTime: "02:50",
         id: "xyz",
         interviewers: [
           {
@@ -196,9 +196,9 @@ export const Home = () => {
       },
       {
         name: "Interview 1",
-        date: "12-12-2022",
-        startTime: "12:05 PM",
-        endTime: "02:50 PM",
+        date: "2022-12-12",
+        startTime: "12:05",
+        endTime: "02:50",
         id: "xyz",
         interviewers: [
           {
