@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Form } from "./Form";
 import { Navbar } from "./Navbar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export const UpdateInterview = () => {
   const navigate = useNavigate();
+  const params = useParams();
   const initialState = {
     name: "",
     date: "",
@@ -22,117 +23,124 @@ export const UpdateInterview = () => {
 
   const [participants, setParticipants] = useState(initialParticipants);
 
-  useEffect(() => {
-    let sampleInterview = {
-      name: "Interview 1",
-      date: "2022-12-12 ",
-      startTime: "12:05",
-      endTime: "02:50",
-      id: "xyz",
-      interviewers: [
-        {
-          name: "Interviewer 3",
-          email: "interviewer3@gmail.com",
+  const fetchInterview = async (id) => {
+    const response = await fetch(
+      process.env.REACT_APP_API_URI + "/interview/" + id,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
         },
-        {
-          name: "Interviewer 4",
-          email: "interviewer4@gmail.com",
-        },
-      ],
-      interviewees: [
-        {
-          name: "Interviewer 1",
-          email: "interviewee1@gmail.com",
-        },
-        {
-          name: "Interviewer 4",
-          email: "interviewee4@gmail.com",
-        },
-      ],
-    };
-    let sampleParticipants = {
-      interviewers: [
-        {
-          name: "Interviewer 1",
-          email: "interviewer1@gmail.com",
-        },
-        {
-          name: "Interviewer 2",
-          email: "interviewer2@gmail.com",
-        },
-        {
-          name: "Interviewer 3",
-          email: "interviewer3@gmail.com",
-        },
-        {
-          name: "Interviewer 4",
-          email: "interviewer4@gmail.com",
-        },
-      ],
-      interviewees: [
-        {
-          name: "Interviewer 1",
-          email: "interviewee1@gmail.com",
-        },
-        {
-          name: "Interviewer 2",
-          email: "interviewee2@gmail.com",
-        },
-        {
-          name: "Interviewer 3",
-          email: "interviewee3@gmail.com",
-        },
-        {
-          name: "Interviewer 4",
-          email: "interviewee4@gmail.com",
-        },
-      ],
-    };
-    // setState({ interviews: sampleInterview });
-    let remainingParticipants = { interviewers: [], interviewees: [] };
-    for (let i = 0; i < sampleParticipants.interviewers.length; i++) {
-      let flag = true;
-      for (let j = 0; j < sampleInterview.interviewers.length; j++) {
-        if (
-          sampleParticipants.interviewers[i].email ==
-          sampleInterview.interviewers[j].email
-        ) {
-          flag = false;
-          break;
-        }
       }
-      if (flag)
-        remainingParticipants.interviewers.push(
-          sampleParticipants.interviewers[i]
-        );
-    }
-    for (let i = 0; i < sampleParticipants.interviewees.length; i++) {
-      let flag = true;
-      for (let j = 0; j < sampleInterview.interviewees.length; j++) {
-        if (
-          sampleParticipants.interviewees[i].email ==
-          sampleInterview.interviewees[j].email
-        ) {
-          flag = false;
-          break;
-        }
-      }
-      if (flag)
-        remainingParticipants.interviewees.push(
-          sampleParticipants.interviewees[i]
-        );
-    }
-    setParticipants(remainingParticipants);
-    setState(sampleInterview);
-  }, []);
+    );
+    const data = await response.json();
 
-  const handleOnSubmit = (interview) => {
-    console.log(interview);
+    if (data.success) {
+      return {
+        ...data.interview,
+        name: data.interview.name,
+        date: data.interview.date?.split("T")[0],
+        startTime: data.interview.startTime?.split("T")[1]?.split(":00")[0],
+        endTime: data.interview.endTime?.split("T")[1]?.split(":00")[0],
+      };
+    } else {
+      return state;
+    }
   };
 
-  const handleDiscard = () => {
-    console.log("Deleted!");
-    navigate("/");
+  const fetchCandidates = async (currentState) => {
+    const response = await fetch(
+      process.env.REACT_APP_API_URI + "/candidates",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+
+    if (data.success) {
+      let remainingParticipants = { interviewers: [], interviewees: [] };
+      for (let i = 0; i < data.interviewers.length; i++) {
+        let flag = true;
+        for (let j = 0; j < currentState?.interviewers?.length; j++) {
+          if (
+            data.interviewers[i].email === currentState?.interviewers[j]?.email
+          ) {
+            flag = false;
+            break;
+          }
+        }
+        if (flag)
+          remainingParticipants?.interviewers?.push(data.interviewers[i]);
+      }
+      for (let i = 0; i < data.interviewees?.length; i++) {
+        let flag = true;
+        for (let j = 0; j < currentState?.interviewees?.length; j++) {
+          if (
+            data.interviewees[i].email === currentState?.interviewees[j]?.email
+          ) {
+            flag = false;
+            break;
+          }
+        }
+        if (flag) remainingParticipants.interviewees.push(data.interviewees[i]);
+      }
+      setParticipants(remainingParticipants);
+      setState(currentState);
+    } else console.log(data.err);
+  };
+
+  useEffect(() => {
+    const asyncFetch = async () => {
+      let currentState = await fetchInterview(params.id);
+      fetchCandidates(currentState);
+    };
+    asyncFetch();
+  }, []);
+
+  const handleOnSubmit = async (interview) => {
+    if (interview.interviewers < 1 || interview.interviewees < 1) {
+      alert("Number of interviewers and interviewees should at least one!");
+      return;
+    }
+    const response = await fetch(
+      process.env.REACT_APP_API_URI + "/updateinterview",
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(interview),
+      }
+    );
+    const data = await response.json();
+
+    if (data.success) {
+      if (data.conflict) {
+        alert("This Interview is conflicting with another interview");
+      } else navigate("/");
+    } else console.log(data.err);
+  };
+
+  const handleDiscard = async (id) => {
+    const response = await fetch(
+      process.env.REACT_APP_API_URI + "/deleteinterview/" + id,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+
+    if (data.success) {
+      navigate("/");
+    } else {
+      console.log(data.err);
+    }
   };
 
   return (

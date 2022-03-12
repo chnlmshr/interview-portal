@@ -9,15 +9,16 @@ export const InterviewDetails = ({
   interviewees,
 }) => {
   return (
-    <div className="my-3 mx-2 p-2 border rounded">
+    <div className="position-fixed my-3 mx-2 p-2 border rounded shadow">
       <div className="d-flex justify-content-between mb-2">
-        <b>{name}</b> <span>{date}</span>
+        <b>{name}</b> <span>{date?.split("T")[0]}</span>
       </div>
       <div className="d-flex justify-content-between mt-2">
-        <b>Start Time</b> <span>{startTime}</span>
+        <b>Start Time</b>{" "}
+        <span>{startTime?.split("T")[1]?.split(":00")[0]}</span>
       </div>
       <div className="d-flex justify-content-between my-2">
-        <b>End Time</b> <span>{endTime}</span>
+        <b>End Time</b> <span>{endTime?.split("T")[1]?.split(":00")[0]}</span>
       </div>
       <hr />
       <div className="row">

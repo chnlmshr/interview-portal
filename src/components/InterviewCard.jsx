@@ -7,16 +7,16 @@ export const InterviewCard = (props) => {
       <div className="card-body">
         <h5 className="card-title pb-2">{props.interview.name}</h5>
         <h6 className="card-subtitle mb-2 text-muted">
-          {props.interview.date}
+          {props.interview.date.split("T")[0]}
         </h6>
         <div className="card-text d-flex flex-column py-2">
           <div className="d-flex">
             <b>Start Time: </b>
-            {props.interview.startTime}
+            {props.interview.startTime?.split("T")[1]?.split(":00")[0]}
           </div>
           <div>
             <b>End Time: </b>
-            {props.interview.endTime}
+            {props.interview.endTime?.split("T")[1]?.split(":00")[0]}
           </div>
         </div>
         <div className="d-flex justify-content-between py-2">
@@ -27,7 +27,7 @@ export const InterviewCard = (props) => {
             Details
           </button>
           <Link
-            to={`/update/${props.interview.id}`}
+            to={`/update/${props.interview._id}`}
             className="btn btn-sm btn-secondary"
           >
             Update

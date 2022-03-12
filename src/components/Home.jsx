@@ -20,226 +20,23 @@ export const Home = () => {
   };
   const [detailState, setDetailState] = useState(initialDetailState);
 
+  const fetchData = async () => {
+    const response = await fetch(process.env.REACT_APP_API_URI + "/home", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await response.json();
+
+    if (data.success) {
+      setState({ interviews: data.interviews });
+      setDetailState({ ...data.interviews[0] });
+    } else console.log(data.err);
+  };
+
   useEffect(() => {
-    var sampleInterviews = [
-      {
-        name: "Interview 1",
-        date: "2022-12-12",
-        startTime: "12:05",
-        endTime: "02:50",
-        id: "xyz",
-        interviewers: [
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-        ],
-        interviewees: [
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-        ],
-      },
-      {
-        name: "Interview 1",
-        date: "2022-12-12",
-        startTime: "12:05",
-        endTime: "02:50",
-        id: "xyz",
-        interviewers: [
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-        ],
-        interviewees: [
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-        ],
-      },
-      {
-        name: "Interview 1",
-        date: "2022-12-12",
-        startTime: "12:05",
-        endTime: "02:50",
-        id: "xyz",
-        interviewers: [
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-        ],
-        interviewees: [
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-        ],
-      },
-      {
-        name: "Interview 1",
-        date: "2022-12-12",
-        startTime: "12:05",
-        endTime: "02:50",
-        id: "xyz",
-        interviewers: [
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-        ],
-        interviewees: [
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-        ],
-      },
-      {
-        name: "Interview 1",
-        date: "2022-12-12",
-        startTime: "12:05",
-        endTime: "02:50",
-        id: "xyz",
-        interviewers: [
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-        ],
-        interviewees: [
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-          {
-            name: "Interviewer 1",
-            email: "interviewer1@gmail.com",
-          },
-        ],
-      },
-    ];
-    setState({ interviews: sampleInterviews });
-    setDetailState({ ...sampleInterviews[0] });
+    fetchData();
   }, []);
 
   const changeDetailsView = (interview) => {
@@ -254,7 +51,7 @@ export const Home = () => {
           "Loading..."
         ) : state.interviews?.length ? (
           <div className="container">
-            <div className="row mt-5">
+            <div className="row mt-5 pt-5">
               <div className="col-md-6">
                 <InterviewDetails {...detailState} />
               </div>

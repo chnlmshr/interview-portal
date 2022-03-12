@@ -13,7 +13,6 @@ export const ScheduleInterview = () => {
     interviewers: [],
     interviewees: [],
   };
-  const [state, setState] = useState(initialState);
 
   const initialParticipants = {
     interviewers: [],
@@ -22,63 +21,57 @@ export const ScheduleInterview = () => {
 
   const [participants, setParticipants] = useState(initialParticipants);
 
+  const fetchData = async () => {
+    const response = await fetch(
+      process.env.REACT_APP_API_URI + "/candidates",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+
+    if (data.success) {
+      setParticipants({
+        interviewers: data.interviewers,
+        interviewees: data.interviewees,
+      });
+    } else console.log(data.err);
+  };
+
   useEffect(() => {
-    var sampleInterview = {
-      name: "Interview 1",
-      date: "2022-12-12",
-      startTime: "12:05",
-      endTime: "02:50",
-      id: "xyz",
-      interviewers: [
-        {
-          name: "Interviewer 1",
-          email: "interviewer1@gmail.com",
-        },
-        {
-          name: "Interviewer 2",
-          email: "interviewer2@gmail.com",
-        },
-        {
-          name: "Interviewer 3",
-          email: "interviewer3@gmail.com",
-        },
-        {
-          name: "Interviewer 4",
-          email: "interviewer4@gmail.com",
-        },
-      ],
-      interviewees: [
-        {
-          name: "Interviewer 1",
-          email: "interviewee1@gmail.com",
-        },
-        {
-          name: "Interviewer 2",
-          email: "interviewee2@gmail.com",
-        },
-        {
-          name: "Interviewer 3",
-          email: "interviewee3@gmail.com",
-        },
-        {
-          name: "Interviewer 4",
-          email: "interviewee4@gmail.com",
-        },
-      ],
-    };
-    // setState({ interviews: sampleInterview });
-    setParticipants({
-      interviewees: sampleInterview.interviewees,
-      interviewers: sampleInterview.interviewers,
-    });
+    fetchData();
   }, []);
 
-  const handleOnSubmit = (interview) => {
-    console.log(interview);
+  const handleOnSubmit = async (interview) => {
+    if (interview.interviewers < 1 || interview.interviewees < 1) {
+      alert("Number of interviewers and interviewees should at least one!");
+      return;
+    }
+    const response = await fetch(
+      process.env.REACT_APP_API_URI + "/scheduleinterview",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(interview),
+      }
+    );
+    const data = await response.json();
+
+    if (data.success) {
+      if (data.conflict) {
+        console.log(data.conflict);
+        alert("This Interview is conflicting with another interview");
+      } else navigate("/");
+    } else console.log(data.err);
   };
 
   const handleDiscard = () => {
-    console.log("Deleted!");
+    console.log("Discarded!");
     navigate("/");
   };
 
@@ -89,7 +82,7 @@ export const ScheduleInterview = () => {
         <div className="row">
           <div className="col-8 offset-2">
             <Form
-              currentState={state}
+              currentState={initialState}
               allParticipants={participants}
               handleOnSubmit={handleOnSubmit}
               handleDiscard={handleDiscard}

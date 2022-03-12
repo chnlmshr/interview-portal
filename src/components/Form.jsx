@@ -9,7 +9,14 @@ export const Form = (props) => {
   };
   const handleOnSubmit = (event) => {
     event.preventDefault();
-    props.handleOnSubmit(state);
+    let formdata = { ...state, interviewees: [], interviewers: [] };
+    for (let i = 0; i < state.interviewees.length; i++) {
+      formdata.interviewees.push(state.interviewees[i]._id);
+    }
+    for (let i = 0; i < state.interviewers.length; i++) {
+      formdata.interviewers.push(state.interviewers[i]._id);
+    }
+    props.handleOnSubmit(formdata);
   };
 
   const addParticipant = (role, participantEmail) => {
@@ -17,7 +24,7 @@ export const Form = (props) => {
       let allInterviewees = participants.interviewees;
       let participant = false;
       for (let i = 0; i < allInterviewees.length; i++)
-        if (allInterviewees[i].email == participantEmail)
+        if (allInterviewees[i].email === participantEmail)
           participant = allInterviewees[i];
       if (!participant) return;
       let interviewees = state.interviewees;
@@ -29,7 +36,7 @@ export const Form = (props) => {
       let allInterviewers = participants.interviewers;
       let participant = false;
       for (let i = 0; i < allInterviewers.length; i++)
-        if (allInterviewers[i].email == participantEmail)
+        if (allInterviewers[i].email === participantEmail)
           participant = allInterviewers[i];
       if (!participant) return;
       let interviewers = state.interviewers;
@@ -64,7 +71,7 @@ export const Form = (props) => {
   }, [props]);
 
   return (
-    <form className="p-3" onSubmit={handleOnSubmit}>
+    <form className="p-3 mt-5 pt-5" onSubmit={handleOnSubmit}>
       <h5 className="pb-3">{props.action} an Interview</h5>
       <div className="form-group py-2">
         <input
@@ -156,7 +163,7 @@ export const Form = (props) => {
             <option value="Participants">Add Interviewers</option>
             {participants.interviewers?.map((interviewer, key) => (
               <option value={interviewer.email} key={key}>
-                {interviewer.name} {interviewer.email}
+                {interviewer.name} | {interviewer.email}
               </option>
             ))}
           </select>
@@ -191,7 +198,7 @@ export const Form = (props) => {
             <option value="Participants">Add Interviewees</option>
             {participants.interviewees?.map((interviewee, key) => (
               <option value={interviewee.email} key={key}>
-                {interviewee.name} {interviewee.email}
+                {interviewee.name} | {interviewee.email}
               </option>
             ))}
           </select>
@@ -209,8 +216,9 @@ export const Form = (props) => {
         </button>
         <button
           className="btn btn-danger"
-          onClick={() => {
-            props.handleDiscard();
+          onClick={(event) => {
+            event.preventDefault();
+            props.handleDiscard(props.currentState._id);
           }}
         >
           Discard
