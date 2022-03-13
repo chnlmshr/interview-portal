@@ -12,11 +12,11 @@ export const InterviewCard = (props) => {
         <div className="card-text d-flex flex-column py-2">
           <div className="d-flex">
             <b>Start Time: </b>
-            {props.interview.startTime?.split("T")[1]?.split(":00")[0]}
+            {props.interview.startTime?.split("T")[1]?.split(":00.000Z")[0]}
           </div>
           <div>
             <b>End Time: </b>
-            {props.interview.endTime?.split("T")[1]?.split(":00")[0]}
+            {props.interview.endTime?.split("T")[1]?.split(":00.000Z")[0]}
           </div>
         </div>
         <div className="d-flex justify-content-between py-2">

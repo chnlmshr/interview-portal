@@ -40,8 +40,10 @@ export const UpdateInterview = () => {
         ...data.interview,
         name: data.interview.name,
         date: data.interview.date?.split("T")[0],
-        startTime: data.interview.startTime?.split("T")[1]?.split(":00")[0],
-        endTime: data.interview.endTime?.split("T")[1]?.split(":00")[0],
+        startTime: data.interview.startTime
+          ?.split("T")[1]
+          ?.split(":00.000Z")[0],
+        endTime: data.interview.endTime?.split("T")[1]?.split(":00.000Z")[0],
       };
     } else {
       return state;

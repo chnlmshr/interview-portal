@@ -44,18 +44,18 @@ export const Home = () => {
   };
 
   return (
-    <div className="mx-5 px-5">
+    <div className="mx-lg-5 px-lg-5">
       <Navbar homeActive />
-      <div className="mx-5">
+      <div className="mx-md-5">
         {state.loading ? (
           "Loading..."
         ) : state.interviews?.length ? (
           <div className="container">
             <div className="row mt-5 pt-5">
-              <div className="col-md-6">
+              <div className="col-md-5">
                 <InterviewDetails {...detailState} />
               </div>
-              <div className="col-md-6 d-flex flex-wrap justify-content-center">
+              <div className="col-md-7 d-flex flex-wrap justify-content-center">
                 {state.interviews.map((interview, key) => (
                   <InterviewCard
                     key={key}
