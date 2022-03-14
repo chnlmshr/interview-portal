@@ -146,11 +146,11 @@ export const UpdateInterview = () => {
   };
 
   return (
-    <div className="mx-5 px-5">
+    <div className="mx-lg-5 px-lg-5">
       <Navbar scheduleActive />
       <div className="container">
         <div className="row">
-          <div className="col-8 offset-2">
+          <div className="col-md-8 offset-md-2">
             <Form
               currentState={state}
               allParticipants={participants}
