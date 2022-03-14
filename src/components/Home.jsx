@@ -46,7 +46,7 @@ export const Home = () => {
   return (
     <div className="mx-lg-5 px-lg-5">
       <Navbar homeActive />
-      <div className="mx-md-5">
+      <div id="top" className="mx-md-5">
         {state.loading ? (
           "Loading..."
         ) : state.interviews?.length ? (

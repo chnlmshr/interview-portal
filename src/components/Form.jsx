@@ -221,7 +221,7 @@ export const Form = (props) => {
             props.handleDiscard(props.currentState._id);
           }}
         >
-          Discard
+          Delete
         </button>
       </div>
     </form>

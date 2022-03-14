@@ -20,12 +20,13 @@ export const InterviewCard = (props) => {
           </div>
         </div>
         <div className="d-flex justify-content-between py-2">
-          <button
+          <a
+            href="#top"
             className="btn btn-sm btn-primary"
             onClick={() => props.changeDetailsView(props.interview)}
           >
             Details
-          </button>
+          </a>
           <Link
             to={`/update/${props.interview._id}`}
             className="btn btn-sm btn-secondary"
