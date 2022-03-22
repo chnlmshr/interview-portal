@@ -50,24 +50,31 @@ export const ScheduleInterview = () => {
       alert("Number of interviewers and interviewees should at least one!");
       return;
     }
-    const response = await fetch(
-      process.env.REACT_APP_API_URI + "/scheduleinterview",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(interview),
-      }
-    );
-    const data = await response.json();
+    let currentDate = new Date();
+    let formDate = new Date(interview.date);
+    console.log(currentDate, formDate);
+    if (formDate < currentDate) {
+      alert("Please Enter a future date!");
+    } else {
+      const response = await fetch(
+        process.env.REACT_APP_API_URI + "/scheduleinterview",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(interview),
+        }
+      );
+      const data = await response.json();
 
-    if (data.success) {
-      if (data.conflict) {
-        console.log(data.conflict);
-        alert("This Interview is conflicting with another interview");
-      } else navigate("/");
-    } else console.log(data.err);
+      if (data.success) {
+        if (data.conflict) {
+          console.log(data.conflict);
+          alert("This Interview is conflicting with another interview");
+        } else navigate("/");
+      } else console.log(data.err);
+    }
   };
 
   const handleDiscard = () => {

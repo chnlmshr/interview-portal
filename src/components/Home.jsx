@@ -20,6 +20,13 @@ export const Home = () => {
   };
   const [detailState, setDetailState] = useState(initialDetailState);
 
+  const initialCandidates = {
+    interviewers: [],
+    interviewees: [],
+  };
+
+  const [candidates, setCandidates] = useState(initialCandidates);
+
   const fetchData = async () => {
     const response = await fetch(process.env.REACT_APP_API_URI + "/home", {
       method: "GET",
@@ -35,12 +42,54 @@ export const Home = () => {
     } else console.log(data.err);
   };
 
+  const fetchCandidates = async () => {
+    const response = await fetch(
+      process.env.REACT_APP_API_URI + "/candidates",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+    if (data.success) {
+      console.log(data);
+      setCandidates({
+        ...candidates,
+        interviewees: data.interviewees,
+        interviewers: data.interviewers,
+      });
+    } else console.log(data.err);
+  };
+
   useEffect(() => {
     fetchData();
+    fetchCandidates();
   }, []);
 
   const changeDetailsView = (interview) => {
     setDetailState({ ...interview });
+  };
+
+  const handleFilter = (event) => {
+    console.log(event.target.name, event.target.value);
+    console.log(state.interviews);
+    let filteredInterviews = [];
+    for (let i = 0; i < state.interviews.length; i++) {
+      let flag = false;
+      for (let j = 0; j < state.interviews[i].interviewees.length; j++) {
+        if (state.interviews[i].interviewees[j]._id === event.target.value) {
+          flag = true;
+          break;
+        }
+      }
+      if (flag) {
+        filteredInterviews.push(state.interviews[i]);
+      }
+    }
+    setState({ ...state, interviews: filteredInterviews });
   };
 
   return (
@@ -53,7 +102,27 @@ export const Home = () => {
           <div className="container">
             <div className="row mt-5 pt-5">
               <div className="col-md-5">
-                <InterviewDetails {...detailState} />
+                <div className="row">
+                  <div className="col">
+                    <select
+                      defaultValue=""
+                      className="form-select"
+                      onChange={handleFilter}
+                    >
+                      <option value="">Filter Candidates</option>
+                      {candidates.interviewees.map((candidate, key) => (
+                        <option key={key} value={candidate._id}>
+                          {candidate.email}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col">
+                    <InterviewDetails {...detailState} />
+                  </div>
+                </div>
               </div>
               <div className="col-md-7 d-flex flex-wrap justify-content-center">
                 {state.interviews.map((interview, key) => (
