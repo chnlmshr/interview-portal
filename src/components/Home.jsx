@@ -7,6 +7,7 @@ export const Home = () => {
   const initialState = {
     loading: true,
     interviews: [],
+    allInterviews: [],
   };
   const [state, setState] = useState(initialState);
   const initialDetailState = {
@@ -37,7 +38,7 @@ export const Home = () => {
     const data = await response.json();
 
     if (data.success) {
-      setState({ interviews: data.interviews });
+      setState({ interviews: data.interviews, allInterviews: data.interviews });
       setDetailState({ ...data.interviews[0] });
     } else console.log(data.err);
   };
@@ -74,19 +75,21 @@ export const Home = () => {
   };
 
   const handleFilter = (event) => {
-    console.log(event.target.name, event.target.value);
-    console.log(state.interviews);
+    if (event.target.value === "") {
+      setState({ ...state, interviews: state.allInterviews });
+      return;
+    }
     let filteredInterviews = [];
-    for (let i = 0; i < state.interviews.length; i++) {
+    for (let i = 0; i < state.allInterviews.length; i++) {
       let flag = false;
-      for (let j = 0; j < state.interviews[i].interviewees.length; j++) {
-        if (state.interviews[i].interviewees[j]._id === event.target.value) {
+      for (let j = 0; j < state.allInterviews[i].interviewees.length; j++) {
+        if (state.allInterviews[i].interviewees[j]._id === event.target.value) {
           flag = true;
           break;
         }
       }
       if (flag) {
-        filteredInterviews.push(state.interviews[i]);
+        filteredInterviews.push(state.allInterviews[i]);
       }
     }
     setState({ ...state, interviews: filteredInterviews });
@@ -103,7 +106,7 @@ export const Home = () => {
             <div className="row mt-5 pt-5">
               <div className="col-md-5">
                 <div className="row">
-                  <div className="col">
+                  <div className="col m-2 mt-3">
                     <select
                       defaultValue=""
                       className="form-select"
